@@ -525,23 +525,30 @@ CMD ["npm","start"]
 
 ### Lecture 40 - Copying Build Files
 
+![40](./Images/40.png)
+
 * To copy files from local machine to container: `COPY ./ ./` COPY from to
 	* COPY : dockerfile commande for copying files
 	* ./ : (1) path to folder to copy from on our machine relative to build context.
 	* ./ : (2) place to copy stuff to inside the container 
 * build context? PWD altered by docker build <path> . in our case where Dockerfile resides
 * we put this command before the `RUN npm install`
-* image is created... we tag it `docker build -t achliopa/simpleweb .`
-* we run it: `docker run achliopa/simpleweb`
+* image is created... we tag it `docker build -t ranjithcheguri/singlecontainer .`
+* we run it: `docker run ranjithcheguri/singlecontainer`
 * it runs.
 * we visit with borwser localhost:3000 and get an error... we need to map ports to container
 
 ### Lecture 41 - Container Port Mapping
 
+![41](./Images/41.png)
+
 * our  browser makes a request to localhost:8080 (on our machine)
 * container has its own se of ports that by default do not accept incoming traffic
 * we need to set explicit port mapping  to enable port forwarding to the localhost
 * this is for incoming comm. container can talk to the outside world (it does it to get dependencies)
+
+![41](./Images/41a.png)
+
 * Port mapping is set in Docker Run command
 * Docker Run with Port mapping: `docker run -p 3000:3000 <image id>`
 	* -p : port forwarding flag
@@ -553,7 +560,7 @@ CMD ["npm","start"]
 
 ### Lecture 42 - Specifying a Working Directory
 
-* we will run our built image starting a shell inside it to do dbugging `docker run -it achliopa/simpleweb sh` we dont do port mapping as we dont need to visit app for debugging
+* we will run our built image starting a shell inside it to do dbugging `docker run -it ranjithcheguri/singlecontainer sh` we dont do port mapping as we dont need to visit app for debugging
 * we run ls and we see that our peoject files are added to the alpine linux root folder /
 * this is not good practice.. we might overwritte linux kernel folders
 * we need to define a working dir in the Dockerfile. w use the command `WORKDIR /usr/app`
@@ -704,7 +711,7 @@ services:
 * `build: .` means to search in the durrent dir for a Dockerfile and use it to build the image for the service-container
 * indentation is important for YAML files
 * - in YAML means an array
-* "8081:8081" => <port on our machine>:<port in container>
+* "8081:8081" => `<port on our machine>:<port in container>`
 
 ### Lecture 50 - networking with Docker Compose
 
