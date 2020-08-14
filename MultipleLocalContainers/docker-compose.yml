@@ -1,0 +1,18 @@
+# version of docker compose 
+version: '3'
+
+# our required services, running in different containers
+services:
+  # first service name
+  redis-server:
+    # image that we want to use for the image
+    image: 'redis'
+  
+  # second service name
+  node-app:
+    #restart policy when this service fails
+    restart: 'always'
+    # for the image, build from the ./ current directory Dockerfile
+    build: .
+    ports:
+      - "4001:8081"

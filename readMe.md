@@ -597,6 +597,8 @@ COPY ./ ./
 
 ### Lecture 45 - App Overview
 
+![45](./Images/45.png)
+
 * we will create a docker container with a webapp that displayes the number of visits to the webpage
 * to build it we will need 2 components. a node(express) web app and a redis server (in memory data storage) 
 * one possible approach is to use a single container with node and redis running inside. if the app receives a lot of traffic this will be abottleneck.
@@ -662,6 +664,10 @@ CMD ["npm","start"]
 
 ### Lecture 48 - Introducing Docker Compose
 
+![48](./Images/48.png)
+
+![48](./Images/48a.png)
+
 * we run our newly created image of the node server of our app wiith `docker run achliopa/visits`
 * we get a bunch of errors as node cannot connect to redis. redis lib tries to connect to redis default port on the localhost '127.0.0.1:6379'
 * our first thought is to run a redis container.. we do it `docker run redis` no customization
@@ -680,6 +686,10 @@ CMD ["npm","start"]
 	* automates some of the long-winded arguments we are passing to docker run
 
 ### Lecture 49 - Docker Compose Files
+
+![49](./Images/49.png)
+
+![49](./Images/49a.png)
 
 * using docker-compose we use the same docker cli commands we use to run containers
 * we encode thes e commands into a YAML file in our project folder. the file is called 'docker-compose.yml'
@@ -728,17 +738,21 @@ const client = redis.createClient({
 
 ### Lecture 51 - Docker Compose Commands
 
+![51](./Images/51.png)
+
 * an equivalent of `docker run <image>` is `docker-compose up` which creates instances of all services specked in the YAML file
 * if we want to rebuild the images of the servicdes in the YAML and run them we use `docker-compose up --build` 
 * we run `docker-compose up` in our project folder.
 * the log says that a netrwork 'visits-default' is created with default drivers
 * this network joins images together
-* the images created are <project_folden_ame>_<service_name>_<number> eg. visits_redis-server_1
+* the images created are `<project_folden_ame>_<service_name>_<number>` eg. visits_redis-server_1
 * we run localhost:4001 in browser and our app works ok
 
 ### Lecture 52 - Stopping Docker Compose Containers
 
-* we can run a container from an image without attaching to its STOUT with flag -d `docker run -d <image>` . it executed in teh background
+![52](./Images/52.png)
+
+* we can run a container from an image without attaching to its STOUT with flag -d `docker run -d <image>` . it executed in the background
 * with docker-compose we start multiple containers. is a pain to stop them one by one
 * we can stop all with `docker-compose down`
 * flag -d (run in background works also for docker-compose e.g `docker-compose up -d`)
@@ -759,9 +773,13 @@ app.get('/crash',(req,res)=>{
 
 ### Lecture 54 - Automatic Container Restarts
 
+![54](./Images/54.png)
+
 * we will look how to make docker-compose maintain and auto restart our containers
 * in our process.exit() call we pass 0 
 * in unix status codes 0 means that we exited but everything is OK, exit status code >0 means something went wrong
+
+![54](./Images/54a.png)
 * to make containers restart we will add 'restart policies' inside our docker-compose .yml file:
 	* "no": never attempt to restart this contatiner if it stops or crashes
 	* always: if this container stops 'for any reason' always attempt to restart it
@@ -775,6 +793,9 @@ app.get('/crash',(req,res)=>{
 * no is put in quotes 'no' because in YAML no is interpreted as false
 * in webapps we usually choose always
 * in a worker process we choose on-failure
+* for exit code 0 in restart policy on failure, container wont restart, for other exit codes, yes it will restart.
+
+* As we have wantedly exited (i.e code 0) docker compose will not restart on failure
 
 ### Lecture 55 - Container Status with Docker Compose
 
