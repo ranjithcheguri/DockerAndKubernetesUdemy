@@ -806,8 +806,11 @@ app.get('/crash',(req,res)=>{
 ## Section 6 - Creating a Production-Grade Workflow
 
 ### Lecture 56 - Development Workflow
-
+![56](./Images/56.png)
 * we will see the entire workshop of buildng an app on docker and publishing it on a hosting service
+
+![56](./Images/56a.png)
+![56](./Images/56b.png)
 * we will go through the whole workflow: development -> testing->deployment cycle
 
 ### Lecture 57 - Flow Specifics
@@ -876,7 +879,7 @@ COPY . .
 CMD ["npm","run","start"]
 
 ```
-* we need to run a dockerfile with a customname. we ll add the -f flag specifiyng the dockerfile to use `docker build -f Dockerfile.dev .`
+* we need to run a dockerfile with a customname. we ll add the -f flag specifiyng the dockerfile to use __`docker build -f Dockerfile.dev .`__
 
 ### Lecture 63 - Duplicating Dependencies
 
@@ -889,30 +892,51 @@ CMD ["npm","run","start"]
 ### Lecture 64 - Starting the Container
 
 * we cp the image id and  use it to run it with `docker run`
+
 * the log says we can view the app at localhost:3000 and on our machine at 172.17.0.2:3000
+
 * localhost:3000 does not work but 172.17.0.2:3000 works on our host machine browser
-* to access the app at localhost on our machine we need to map ports so we run `socker run -p  3000:3000 id`
+
+* to access the app at localhost on our machine we need to map ports so we run `docker run -p  3000:3000 id`
+
+* Due to a recent update in the Create React App library, we will need to change how we start our containers.
+
+* In the upcoming lecture, you'll need to add the -it flag to run the container in interactive mode: `docker run -it -p 3000:3000 CONTAINER_ID`
+
 * we make a change. we mod the text in App.js. we refresh the page and no change in the app.
+
 * the change we did was in our local copy not in the container we need to rebuild or find an automated solution
 
 ### Lecture 66 - Docker Volumes
 
+![66](./Images/66.png)
+
 * volumes are a way of mapping a  local HD folder in the container
+
 * so far we have seen only how to copy data from localhost to container.
+
 * with volumes we set a reference in the container that maps back to the localhost
+
 * seting volumes is more difficult than COPY
-* the docker run command with volumes is like: `docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app <image_id>`
+
+![66](./Images/66a.png)
+
+* the docker run command with volumes is like: `docker run -it -p 3000:3000 -v /app/node_modules -v $(pwd):/app <image_id>`
 	* -v /app/node_modules : put a bookmark on the node_modules folder
 	* -v $(pwd):/app : map the pwd (current dir) into the /app folder
 * the second switch is the one doing the mapping we want
-* the first switch dows not have a colon. if we omit it and run the command `docker run -p 3000:3000 -v $(pwd):/app e84a4e3ebcf6` we get a node error 
+* the first switch dows not have a colon. if we omit it and run the command `docker run -it -p 3000:3000 -v $(pwd):/app e84a4e3ebcf6` we get a node error 
 
 ### Lecture 67 - Bookmarking Volumes
 
 * why we saw the error? as node libs (node_modules) are not found. the libs are not found why? because container is mapping to our local dir and in our local dir we have deleted the node_modules
 *  to bookmark a volume (not map it to the local machine) we write the path in container but skip the colon and the first part (path on our machine) `-v /app/node_modules` so we make it a placeholder in teh container but dont map it to the localmachine
 * we  run the full command `docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app e84a4e3ebcf6` and app start instantly
+
 * now our local code changes get instantly reflected in the running app inside the docker container dev server. COOL!!!! (auto refresh is a create-react-app feat)
+
+![68](./Images/68.png)
+* __make sure your volumes path are given correct, it wont throw up any errors but auto sync will not work__
 
 ### Lecture 68 - Shorthand with Docker Compose
 
@@ -1005,6 +1029,7 @@ so we opt on leaving it in
 
 ### Lecture 75 - Need for Nginx
 
+![75](./Images/75.png)
 * there is a great difference with our app running in a dev environent and in production environment
 * in dev environemnt thereis a dev server running in the we container. the browser interacts withthe dev server that uses the build folder to serve content. namely the one html file (index.html) and the bundled up js application code
 * in prod enviornment we have the public files (index.html + optimized js bundle + any other files) but the dev server is missing. it is not appropriate for a production environment. it consumes far too many resources to handle code changes fast. in production our code base is stable
@@ -1012,6 +1037,7 @@ so we opt on leaving it in
 
 ### Lecture 76 - Multi-step Docker Bulds
 
+![76](./Images/76.png)
 * we ll look how to get nginx into our production container
 * we will add a seconf dockerfile in our project dit named 'Dockerfile' for our production image.
 * in our new Dockerfile we need to:
@@ -1027,6 +1053,8 @@ so we opt on leaving it in
 	* Run Phase: use nginx => copy over the result of 'npm run build' => start nginx
 
 ### Lecture 77 - Implementing Multi-Step Builds
+
+![76](./Images/76a.png)
 
 * the first step in our dockerfile looks like
 ```
@@ -1055,7 +1083,8 @@ COPY --from=builder /app/build /usr/share/nginx/html
 ### Lecture 78 - Running Nginx
 
 * we are ready to test with `docker build .` no need for -f flag as we use default dockerfile name
-* we run the container  `docker run -p 8080:80 <container_id>`
+* we run the container  __`docker run -p 8080:80 <container_id>`__
+* 80 is default nginx port exposed
 * we see no output. but we visit browser at localhost:8080 annd see our app running
 
 ## Section 7 - Continuous Integration and Deployment with AWS

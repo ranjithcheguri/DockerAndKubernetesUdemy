@@ -1,0 +1,10 @@
+FROM node:alpine
+
+#didnot work when used /usr/app here (even after changing in docker run commandline volume setup, play with it and see)
+WORKDIR /app
+
+COPY ./package.json ./
+RUN npm install
+COPY ./ ./
+
+CMD ["npm","start"]
