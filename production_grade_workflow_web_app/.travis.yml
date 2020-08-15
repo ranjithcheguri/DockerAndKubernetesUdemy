@@ -1,0 +1,10 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - cd production_grade_workflow_web_app
+    - docker build -t ranjithcheguri/production_webapp -f Dockerfile.dev .
+
+script:
+    - docker run ranjithcheguri/production_webapp npm run test --coverage
