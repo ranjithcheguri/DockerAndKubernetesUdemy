@@ -1153,6 +1153,8 @@ git submodule add git@github.com:achliopa/docker-react myCode/docker-react
 
 ### Lecture 81 - Travis CI setup
 
+![81](./Images/81.png)
+
 * we ll setup travis CI on github. travis works as follows
 	* whenever we puch code on our github repo travis is triggered
 	* travis does its work
@@ -1166,6 +1168,8 @@ git submodule add git@github.com:achliopa/docker-react myCode/docker-react
 * we see our repo
 
 ### Lecture 82 - Travis YML file configuration
+
+![82](./Images/82.png)
 
 * we need to direct Travis to test our code when we push
 * we add a config file .travis.yml in our root project dir:
@@ -1181,7 +1185,7 @@ services:
 	- docker
 
 before_install:
-	- docker build -t achliopa/docker-react -f Dockerfile.dev .
+	- docker build -t ranjithcheguri/production_webapp -f Dockerfile.dev .
 ```
 * every time we run docker in travis ci we need superuser permissions `sudo: required`
 * we need to tell travis on teh services we will use (docker). travis will run docker
