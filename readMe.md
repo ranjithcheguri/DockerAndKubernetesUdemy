@@ -1380,6 +1380,7 @@ Sometimes AWS has a tough time with the '.' folder designation and prefers the l
 ### Lecture 92 - Redeploy on Pull Request merge
 
 * after some time we see that ravis checks passed. travis attempted to merge our changes and run the tests which passed. so its safe to merge
+* code review happens and followed by merge
 * as we merge it equalls a push to master so the whole test+deploy flow reruns
 
 ### Lecture 93 - Deployment Wrapup
