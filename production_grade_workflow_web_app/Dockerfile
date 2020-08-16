@@ -1,6 +1,6 @@
 # production build
 
-# Build Phase 
+# Build Phase (default named : 0)
 FROM node:alpine
 WORKDIR '/app'
 COPY package*.json ./
@@ -13,4 +13,4 @@ FROM nginx
 # expose this port from this container to outside elastic bean stalk
 EXPOSE 80
 # copy from another phase and from folder : to folder
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=0 /app/build /usr/share/nginx/html
