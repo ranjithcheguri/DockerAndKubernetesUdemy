@@ -1321,6 +1321,49 @@ COPY -from=builder /app/build/ /usr/share/nginx/html
 * we repeat commit push and see the deploy
 * travis work is about 4min
 
+### AWS Build Still Failing?
+```
+If you still see a failed deployment, try the following fixes:
+
+1) Use an Unnamed Builder
+
+Currently, there seems to be a bug with Elasticbeanstalk and the multi-stage builder step is failing. If you pull the AWS logs, you will see:
+
+"docker pull" requires exactly 1 argument
+
+The quick fix will be to use an unnamed builder, rather than a named builder:
+
+By default, the stages are not named, and you refer to them by their integer number, starting with 0 for the first FROM instruction.
+https://docs.docker.com/develop/develop-images/multistage-build/#name-your-build-stages
+
+The Dockerfile would now look like this:
+
+  FROM node:alpine
+  WORKDIR '/app'
+  COPY package*.json ./
+  RUN npm install
+  COPY . .
+  RUN npm run build
+ 
+  FROM nginx
+  EXPOSE 80
+  COPY --from=0 /app/build /usr/share/nginx/html
+
+2) Upgrade to t2small instance
+
+The npm install command frequently times out on the t2.micro instance that we are using.  An easy fix is to bump up the instance type that Elastic Beanstalk is using to a t2.small.
+
+Note that a t2.small is outside of the free tier, so you will pay a tiny bit of money (likely less than one dollar if you leave it running for a few hours) for this instance.  Don't forget to close it down!  Directions for this are a few videos ahead in the lecture titled 'Environment Cleanup'.
+
+3) Refactor COPY line
+
+Try editing the 'COPY' line of your Dockerfile like so:
+
+COPY package*.json ./
+
+Sometimes AWS has a tough time with the '.' folder designation and prefers the long form ./
+```
+
 ### Lecture 91 - Workflow with Github
 
 * we will create the secont working branch 'features' so when we pull to master and merge it will trigger build
