@@ -1292,6 +1292,7 @@ deploy:
   secret_access_key:
     secure: "$AWS_SECRET_KEY"
 ```
+![88](Images/88.png)
 * we will comit and push our changes to github to see the flow take action
 * we see in travis the log of the deploy
 
@@ -1300,6 +1301,9 @@ deploy:
 * in the travis build log we see. that deploy is done
 * we visit the elastibgeanstalk app url in browser but we dont see the app
 * also the state of the environemnt says degraded
+
+![89](Images/89.png)
+
 * we need to expose the port in elasticbeanstalk when we run the docker container in travis.yml
 * we do the expose after the first deploy (not sure why) and we do it in the production dockerfile in the prod phase. `EXPOSE 80`
 ```
