@@ -1209,8 +1209,12 @@ script:
 
 ### Lecture 84 - Automatic Build Creation
 
+![84](Images/84.png)
+
 * we push our code to github
 * travis ci is triggered. in dashboard we see that our tests pass (if we go to travis when tests are run we can see log)
+
+![84](Images/84a.png)
 
 ### Lecture 85 - AWS Elastic Beanstalk
 
@@ -1226,6 +1230,8 @@ script:
 * DO NOT FORGET TO SHUT DOWN THE INSTANCE AFTER FINISHING TO AVOID BILLING
 
 ### Lecture 86 - More on Elastic Beanstalk
+
+![86](Images/86.png)
 
 * wehn setup is compete our docker-env is healthy and running
 * why we use elastic beanstalk?

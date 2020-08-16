@@ -10,3 +10,15 @@ script:
     # the below didn't work as travis CI is exprecting the exit 0 status and this is runs tests and wont send any code, so travis will be stuck in waiting state
     # - docker run ranjithcheguri/production_webapp npm run test --coverage
     - docker run -e CI=true ranjithcheguri/production_webapp npm run test
+
+deploy:
+    provider: elasticbeanstalk
+    region: "us-west-2"
+    app: "udemy_production_webapp"    # what you have named in AWS beanstalk, exactly same
+    env: "UdemyProductionWebapp-env"
+    bucket-name: "elasticbeanstalk-us-west-2-392320685985"
+    bucket_path: "udemy_production_webapp"
+    on:
+        branch: master
+        access_key_id: $AWS_ACCESS_KEY
+        secret_access_key: $AWS_SECRET_KEY
