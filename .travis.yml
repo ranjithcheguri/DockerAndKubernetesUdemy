@@ -11,20 +11,20 @@ script:
     - docker run -e CI=true ranjithcheguri/multicontainer_webapp npm run test
 
 after_success:
-    - docker build -t ranjithcheguri/multiContainer_client ./client
-    - docker build -t ranjithcheguri/multiContainer_nginx ./nginx
-    - docker build -t ranjithcheguri/multiContainer_server ./Server
-    - docker build -t ranjithcheguri/multiContainer_worker ./Worker
+    - docker build -t ranjithcheguri/multicontainer_client ./client
+    - docker build -t ranjithcheguri/multicontainer_nginx ./nginx
+    - docker build -t ranjithcheguri/multicontainer_server ./Server
+    - docker build -t ranjithcheguri/multicontainer_worker ./Worker
     
     # Login to the docker CLI and push to docker hub
     # supplying password from travis secrets to our command docker login
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
     # after login, push all these images to docker hub
-    - docker push ranjithcheguri/multiContainer_client
-    - docker push ranjithcheguri/multiContainer_nginx
-    - docker push ranjithcheguri/multiContainer_server
-    - docker push ranjithcheguri/multiContainer_worker
+    - docker push ranjithcheguri/multicontainer_client
+    - docker push ranjithcheguri/multicontainer_nginx
+    - docker push ranjithcheguri/multicontainer_server
+    - docker push ranjithcheguri/multicontainer_worker
     
 deploy:
     provider: elasticbeanstalk

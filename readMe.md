@@ -2065,6 +2065,7 @@ after_success:
   - docker build -t achliopa/multi-server ./server
   - docker build -t achliopa/multi-worker ./worker
 ```
+Experienced failing react client tests: I had to include this in package.json of client `"test": "react-scripts test --env=jsdom"`
 
 ### Lecture 131 - Pushing Images to Docker Hub
 
@@ -2081,6 +2082,8 @@ after_success:
   - docker push achliopa/multi-worker
 ```
 * we need to push to github to ttrigger travis to test our flow  so far (should see images on dockerhub). its a success
+
+![131](Images/131.png)
 
 ## Section 11 - Multi-Container Deployments to AWS
 
