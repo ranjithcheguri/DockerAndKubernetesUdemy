@@ -25,15 +25,4 @@ after_success:
     - docker push ranjithcheguri/multicontainer_nginx
     - docker push ranjithcheguri/multicontainer_server
     - docker push ranjithcheguri/multicontainer_worker
-    
-deploy:
-    provider: elasticbeanstalk
-    region: "us-west-2"
-    app: "udemy_production_webapp"    # what you have named in AWS beanstalk, exactly same
-    env: "UdemyProductionWebapp-env"
-    bucket-name: "elasticbeanstalk-us-west-2-392320685985"
-    bucket_path: "udemy_production_webapp"
-    on:
-        branch: master
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
+
