@@ -4,7 +4,8 @@ services:
 
 before_install:
     - cd multiContainer_web_app
-    - docker build -t ranjithcheguri/multicontainer_webapp -f Dockerfile.dev ./client
+    # watchout this staement, think for sometime diff between single_container yml file and this
+    - docker build -t ranjithcheguri/multicontainer_webapp -f ./client/Dockerfile.dev ./client
 
 script:
     - docker run -e CI=true ranjithcheguri/multicontainer_webapp npm run test
