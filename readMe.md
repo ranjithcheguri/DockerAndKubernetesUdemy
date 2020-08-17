@@ -1937,6 +1937,8 @@ Make sure you rebuild your containers after making this change with docker-compo
 
 ### Lecture 123 - Production Multi-Container Deployments
 
+![123](Images/123.png)
+
 * our workflow for a single container workflow was
 	* push code to github
 	* travis autmatically pulls repo
@@ -1956,10 +1958,9 @@ Make sure you rebuild your containers after making this change with docker-compo
 * dockehub allows us to have our own personal images online
 
 ### Lecture 124 - Production Dockerfiles
-
 * worker and server dockerfiles for production are same as dev just the command changes
 * nginx prod dockerfile is the same as dev
-* an optimization for nginx would be to remove the roting of websockets in default.conf creating a production version of it as in production there is no devserver
+* an optimization for nginx would be to remove the routing of websockets in default.conf creating a production version of it as in production there is no devserver
 
 ### Lecture 125 - Multiple Nginx Instances
 
@@ -1977,6 +1978,9 @@ COPY --from=builder /app/build/ /usr/share/nginx/html
 ```
 * then we did a multi step build building and then running an nginx image cping files from build phase to serve
 * in our single container deployment AWS EB was running an nginx  server with production files serving content at port 80.
+
+![124](Images/124.png)
+
 * now things will be different. with multicontainer env. in production AWS EB will
 	* run multiple containers
 	* nginx router will listen at port 80
@@ -1991,12 +1995,13 @@ COPY --from=builder /app/build/ /usr/share/nginx/html
 * we need to change the listening port to 3000. to do so we mod the nginx server config
 ```
 server {
-	listen 3000;
-
-	location / {
-		root /usr/share/nginx/html;
-		index index.html index.htm;
-	}
+  listen 3000;
+ 
+  location / {
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+    try_files $uri $uri/ /index.html;
+  }
 }
 ```
 * we set the / route serving content from nginx default location
@@ -2033,6 +2038,8 @@ COPY --from=builder /app/build/ /usr/share/nginx/html
 * we need a .travis.yml file
 
 ### Lecture 130 - Travis Configuration Setup
+
+![130](Images/130.png)
 
 * in the travis file we will:
 	* specify docker as dependency

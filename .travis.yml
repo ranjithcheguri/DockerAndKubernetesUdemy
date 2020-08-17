@@ -3,14 +3,28 @@ services:
     - docker
 
 before_install:
-    - cd production_grade_workflow_web_app
-    - docker build -t ranjithcheguri/production_webapp -f Dockerfile.dev .
+    - cd multiContainer_web_app
+    - docker build -t ranjithcheguri/multicontainer_webapp -f Dockerfile.dev ./client/Dockerfile.dev
 
 script:
-    # the below didn't work as travis CI is exprecting the exit 0 status and this runs tests and wont send any code, so travis will be stuck in waiting state
-    # - docker run ranjithcheguri/production_webapp npm run test --coverage
-    - docker run -e CI=true ranjithcheguri/production_webapp npm run test
+    - docker run -e CI=true ranjithcheguri/multicontainer_webapp npm run test
 
+after_success:
+    - docker build -t ranjithcheguri/multiContainer_client ./client
+    - docker build -t ranjithcheguri/multiContainer_nginx ./nginx
+    - docker build -t ranjithcheguri/multiContainer_server ./Server
+    - docker build -t ranjithcheguri/multiContainer_worker ./Worker
+    
+    # Login to the docker CLI and push to docker hub
+    # supplying password from travis secrets to our command docker login
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+    # after login, push all these images to docker hub
+    - docker push ranjithcheguri/multiContainer_client
+    - docker push ranjithcheguri/multiContainer_nginx
+    - docker push ranjithcheguri/multiContainer_server
+    - docker push ranjithcheguri/multiContainer_worker
+    
 deploy:
     provider: elasticbeanstalk
     region: "us-west-2"
