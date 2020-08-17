@@ -1393,6 +1393,8 @@ Sometimes AWS has a tough time with the '.' folder designation and prefers the l
 
 ### Lecture 95 - Single Container Deployment Issues
 
+![95](Images/95.png)
+
 * some issues with our first production grade app
 	* the app was simple . no outside dependencies
 	* our image was built multiple times
@@ -1410,6 +1412,10 @@ Sometimes AWS has a tough time with the '.' folder designation and prefers the l
 * and  alist of previous searched indexes
 
 ### Lecture 98 - Application Architecture 
+
+![98](Images/98.png)
+
+![98](Images/98a.png)
 
 * the development architecture of our app:
 	* browser hits nginx web server
@@ -1588,7 +1594,7 @@ app.listen(5000, err => {
 
 ### Lecture 103 - Generating the React App
 
-* in base project folder we run `create-react-app client`
+* in base project folder we run `npx create-react-app client`
 
 ### Lecture 104 - Fetching Data in the React App
 
@@ -1718,6 +1724,8 @@ CMD["npm","run","dev"]
 
 ### Lecture 112 - Adding Postgres as a Service
 
+![112](Images/112.png)
+
 * we ll assempble a docker-compose file to connect and build/run our iamges easily
 	* postgres: which image from hub?
 	* redis: which image from hub?
@@ -1756,6 +1764,8 @@ services:
 ```
 
 ### Lecture 114 - Environment Variables with Docker Compose
+
+![114](Images/114.png)
 
 * we add another section to the server config in compose file to set environment variables
 * there are 2 ways to set env variables in a docker compose file.
@@ -1801,12 +1811,17 @@ services:
 
 ### Lecture 116 - Nginx Path Routing
 
+![98](Images/98.png)
+
 * in our previous project nginx was used in production environment to host hte production built files for serving our content
 * in this project nginx will exist in the developlemnt env (to do routing)
 	* our browser will request content like index.html and the included bundle.js these requsests go to React server
 	* after frontside rendering browser will request data from API to feed the app
 	* browser will request /values/all and balues/current content from Express API server
 * we need an infrastructure to do top level routing... this will be done by nginx
+
+![116](Images/116.png)
+
 * in our code client side app (react) requests API data with Axios from /a[i/values/* routes
 * our backend API serves them in /values/* routes
 * nginx will have a simple job. 
@@ -1818,6 +1833,8 @@ services:
 * nginx after routing /api/ chops off api and passes the rest to the express APi
 
 ### Lecture 117 - Routing with Nginx
+
+![117](Images/117.png)
 
 * to setup nginx and give it a set of routing rules we will create a file called default.conf
 * default.conf adds configuration rules to Nginx:
@@ -1877,6 +1894,18 @@ COPY ./default.conf /etc/nging/conf.d/default.conf
         - '3050:80'
 ```
 * we do port mapping ans add restart policy to always. nginx is the dorr to our app , is lightweight so it should run anytime
+
+```
+Recently, a bug was introduced with the latest Create React App version that is causing the React app to exit when starting with Docker Compose.
+
+To Resolve this:
+
+Add stdin_open property to the client service of your docker-compose.yml file
+
+  client:
+    stdin_open: true
+Make sure you rebuild your containers after making this change with docker-compose down && docker-compose up --build
+```
 
 ### Lecture 119 - Starting Up Docker Compose
 

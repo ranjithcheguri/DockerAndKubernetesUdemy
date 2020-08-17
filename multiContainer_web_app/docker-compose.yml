@@ -1,0 +1,60 @@
+version: '3'
+services: 
+    postgres:
+        image: 'postgres:latest'
+        environment:
+            - POSTGRES_PASSWORD = postgres_password
+    redis:
+        image: 'redis:latest'
+    nginx:
+        restart: always #(not in quotes)
+        depends_on:
+            - api
+            - client
+        build:
+            dockerfile: Dockerfile.dev
+            # location of docker file and also building location
+            context: ./nginx/
+        ports:
+            - '3050:80' #(in quotes)
+
+    # our express server (renamed to api, just that we dont get confused in nginx configuration file)
+    api:
+        depends_on:
+            - postgres
+        build:
+            dockerfile: Dockerfile.dev
+            # location of docker file and also building location
+            context: ./Server/
+        volumes:
+            # anytime our application tries to access app dir inside the container, except for the node_modules folder, everything will get redirected to /server folder
+            # thats how changes made in ./server/ will be reflected in the ./app
+            - /app/node_modules
+            - ./Server:/app
+        environment:
+            # - indicates an array
+            - REDIS_HOST = redis
+            - REDIS_PORT = 6379
+            - PGUSER = postgres
+            - PGHOST = postgres
+            - PGDATABASE = postgres
+            - PGPASSWORD = postgres_password
+            - PGPORT = 5432
+    client:
+        stdin_open: true
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./client
+        volumes: 
+            - /app/node_modules
+            - ./client:/app
+    worker:
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./Worker
+        volumes: 
+            - /app/node_modules
+            - ./Worker:/app
+        environment:
+            - REDIS_HOST = redis
+            - REDIS_PORT = 6379
